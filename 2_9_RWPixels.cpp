@@ -39,7 +39,6 @@ int shift = 1;
             int xa = i+directionx*counter;
             int ya = -0.25*pow(i,2) + directiony*counter;
         img_cny.at<uchar>(x+ya+counter,y+xa+counter) = 255;
-        img_rgb.at<uchar>(x+ya+counter,y+xa+counter) = [255,0,50];
         }
         
         cv::imshow("RGB", img_rgb);
