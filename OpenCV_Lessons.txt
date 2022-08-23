@@ -1,0 +1,66 @@
+Programming Practice Lessons Learned:
+
+    1 August 9th 2022 - I'm finally starting OpenCV after doing environment setup:  0hr += 3;
+        1.1 Theres a configuration file that allows you to choose your compiler, include paths, debugging programs, and how the debugging is launched and run, and what is compiled
+        1.2 Modifying the task.json file can change the way the debugger acts towards you and eliminate some errors with finding libraries.
+        1.3 You can execute programs and give them variables by doing ./main.cpp variable1 variable2
+        1.4 printf(“ blah blah”) works just like std::cout.  
+        1.5  std::cout needs #include <iostream>
+        1.6 The difference between #include <“library”> and #include “library” is that the brackets uses the include path, and is part of standard installed libraries, while the later looks for local files related and quite close to the program in the files folder.
+        1.7 You need to configure VS Code before using it! Lots of setup.
+        1.8 Make a separate bin directory for when you compile and build your executables.  Then tell the compiler to put them in that bin directory
+        1.9 g++ is generally the compiler for c++ programs, while gcc is for c programs
+    2 August 10th 2022: 3hr += 7 hours;
+        2.1 There are space scales in computer vision that control how much resolution a computer sees an image with and help it understand how large it should be looking o interpret things
+        2.2 A callback function is one that you feed to another function and it is then called from inside the function.
+        2.3 The Trackbar for the video function allows you to give it a callback function that is called anytime the Trackbar is moved.  Example cv::createTrackbar(“$trackbarName”, “$desiredWindow”, &trackbarPositionVariable, videoFrameNumber/Trackbarsize, callbackFunction).  “Callback function is called every time the tracker bar is clicked
+        2.4 The pytdown() function is used for downsampling every other pixel and allows videos to become half as big as they were before. 
+        2.5 Canny edge detector uses convolution to find edges in programs. 
+        2.6 The image processing functions have a “cache memory?” that allows them to temporarily store your variables and so you can chain image processing functions together
+    3 August 11th 2022: 10hr += 6
+        3.1 The cv::Point p<2i>(x,y) operator is useful for setting points
+        3.2 Compare() function has multiple operators for comparing two files together and making outputting the result of their comparison. I attempted to use this for tracking motion.
+        3.3 Color is often determined by a {0,0,0} vector/scalar where it is BGR
+        3.4 There are many tools for drawing in OpenCV, most of which are just polygons and text.  Nothing too special here.
+        3.5 Using cv::Mat mat2(mat1) just creates a pointer of mat2 to mat1. It doesn’t actually create the data separately! If you want a completely new copy, use cv::Mat mat2 = mat1.clone(); Then it creates a completely new object. 
+        3.6 There are tons of datatypes for matrices, arrays, and points, lines, etc…  they tend to have special types associated which are shorthand for stuff. 
+        3.7 Sparse mats are mats that don’t have values for every spot in the array.  Mat(s) are densely populated arrays that have values in them constantly.
+        3.8 cv::VideoCapture variables have cap.get(cv::CAP_PROP_FRAME_WIDTH,HEIGHT, etc..) functions in them, meanwhile Mat variables have Mat.rows, Mat.cols  and other member variables
+        3.9 You can have multiple variables as arguments for a C call function, argc is the count of inputs, char** argv is the inputs themselves.
+        3.10 Alpha blending is where you use different pictures and combine their values to blend images together.  It has alpha, beta, and gamma values. 
+        3.11 Your mouse is tracked by OpenCV and can be used to pull events and callbacks on actions
+    4 August 11th, 2022: 16hr += 4
+        4.1 The short Mat and Vec datatypes are great for multiplication and all manner of calculations, compatible with eachother
+        4.2 std::cout is compatible with the short form mat vec datatypes
+        4.3 You can access the characters from the keyboards actual values by taking their inputs as numbers through the cv::waitKey() function and doing this:
+            3.1 char key = static_cast<char>(waitKey());  This gets the ascii numbers as the actual text value
+            3.2 std::string.push_back(char c) is functional for building strings, along with pop_back()
+        4.4 The main datatypes you can make for the matrices are (8,16,32)(U,B,S,F,D)C(1,2,3)
+        4.5 Scalar is a 4 number vector that is meant to hold x,y,z and s (magnitude/scalar) values, but it is often used for colors too.
+        4.6 _tp is “type” in templates, you can use them to replace any datatype in a code piece.
+        4.7 use the mat.at<_tp>(x,y) to access the value of pixels in a mat array
+        4.8 you can instantiate a mat by doing cv::mat::zeros(w,h, _tp);
+        4.9 If you want to fix the value that an image is displaying, you cannot just recreate the variable with a blank slate, because that leaves the vector still referenced by the window that you have open and displaying the window!  you have to use the .setto() member function?
+    5 August 15th, 2022: 20hr += 6
+        5.1 When accessing an array using the at<_typ>() function, it is imperative that you use the right <typ> variable! I used a short instead of a byte, and was only able to set every other pixel in my mat image. 
+        5.2 There are multiple different color spaces.  HSV,BGR, LCM.  They are all useful for different things and separate different components of the color spectrum from each other in different ways, allowing your computer to read correctly from images
+        5.3 Segmentation faults can come from anywhere!  You see one at a certain line in your code, but it might not be from there, it might be from earlier.  Pay close attention to datatypes and size of numbers and array access.
+        5.4 cv::imshow will display images of floats if they are between 0 and 1
+        5.5 When using pointers.  If you instantiate a pointer, it must point to a variable location!  You cannot pass a pointer to an object and expect it to work with a blank memory space, unless it does the setting itself. 
+        5.6 You should iterate through a mat variable by getting a pointer to the row, then moving to the column. This is because the rows are contiguous, but the columns are not.  So asking a program to go to the next element in the row is easy, but going to the next element in the column requires math. Can get a pointer by using const base_type* Row = cv::mat.ptr<base_mat_datatype(byte, short, int, long, etc…>(row_num)
+        5.7 Learned about template<class type> templates!  Where you can create one function or class and have the compiler determine what types it needs to instantiate in order for your code to work.
+        5.8 Many small learnings, and relearning.  More to come tomorrow!
+    6 August 22nd, 2022: 26hr += 6
+        6.1 When asking the std::cout function to interpret the uchar variables, it defaults to chars. Need to cast as (int) before outputting
+        6.2 constexpr is used for telling the compiler to calculate an expression at compile time, to save computation time later
+        6.3 Use the cv::split(src, colors) function to collect the different channels of color.
+            6.3.1 The color variable requires format vector<cv::Mat> Colors.  The function will handle formatting colors to correct dimensions
+        6.4 A mask in OpenCV is just a cv::Mat array that uses zeros and ones to tell another function which pixels to operate on.
+            6.4.1 The mask should be the same dimensions as the source material that is being mutated
+        6.5 To do visual odometry, using the persistence of features of the environment between frames of a video clip, and then estimating the new locations of the features allows the user to use the collective delta of the objects to estimate your path
+            6.5.1 When multiple features are moving, the camera should estimate odometry by estimating it's motion as the amount of motion that would create the minimum relative motion of the surrounding features
+        6.6 People use gravity to help estimate wall and floor segmentation. We know walls are vertical and floors are horizontal.  Cameras alone don't know this, making wall and floor segmentation more difficult
+        6.7 Stereo vision is best for odometry estimation and spacial mapping in general
+        6.8 Colors are a big mix of numbers.  Light blue is a combination of RGB, not just blue. When filtering color, you have to interpret RGB specially to know what you are filtering. Consider HSV instead and learn
+        6.9 using cv::bitwise_and(img,cv::Scalar(0,0,0),img,mask); allows filtering colors you want with mask, bitwise_not allows bit inversion of image portions
+    7 August 23rd, 2022: 32hr += 
