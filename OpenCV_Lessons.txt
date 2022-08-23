@@ -63,4 +63,5 @@ Programming Practice Lessons Learned:
         6.7 Stereo vision is best for odometry estimation and spacial mapping in general
         6.8 Colors are a big mix of numbers.  Light blue is a combination of RGB, not just blue. When filtering color, you have to interpret RGB specially to know what you are filtering. Consider HSV instead and learn
         6.9 using cv::bitwise_and(img,cv::Scalar(0,0,0),img,mask); allows filtering colors you want with mask, bitwise_not allows bit inversion of image portions
+        6.10 Added a .gitignore file to my repository
     7 August 23rd, 2022: 32hr += 
