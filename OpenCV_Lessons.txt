@@ -64,4 +64,14 @@ Programming Practice Lessons Learned:
         6.8 Colors are a big mix of numbers.  Light blue is a combination of RGB, not just blue. When filtering color, you have to interpret RGB specially to know what you are filtering. Consider HSV instead and learn
         6.9 using cv::bitwise_and(img,cv::Scalar(0,0,0),img,mask); allows filtering colors you want with mask, bitwise_not allows bit inversion of image portions
         6.10 Added a .gitignore file to my repository
-    7 August 23rd, 2022: 32hr += 
+    7 August 23rd, 2022: 32hr += 7
+        7.01 Learned to implement trackbar control
+        7.02 Callback functions have userdata parameters that allow passing a void* to the object that you care about.  You then inform the computer what pointer type it is and dereference it in order to use it
+        7.03 cv::subtract() and almost all functions will reformat the object to have proper dimensions. Need to make sure you are inputtting correct image formats
+        7.04 using clone1 = clone2 = img.clone() will copy img's values, and set clone1 and clone 2 pointing to the same values!  Need to use separate clone() functions for each
+        7.05 Use compare() for a good way to create image masking without accessing each element of cv::Mat
+        7.06 split() and merge() are useful counterparts to eachother. It's not possible to modify one channel within a Mat without accessign each value.  Split, modify, then merge
+        7.07 Corners are features in computer vision that are usually unique to an image and are used to identify movement. OpenCV has functions to find features for users
+        7.08 cv::goodFeaturesToTrack() will find features in an image for user
+        7.09 Git revert will remove files from your computer, not just revert the repository.  Use git reflog or git checkout <commit_id> to revert to before.  Git log allows finding id'S
+        7.10 Sharper images lead to better unique feature identification
