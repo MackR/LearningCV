@@ -1,0 +1,63 @@
+{
+	// Place your LearningCV workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	"Image OpenCV Template": {
+		"prefix": "ImageCV",
+		"body": [
+			"#include <opencv2/opencv.hpp>",
+			"#include <stdio.h>",
+			"#include <iostream>",
+			"",
+			"",
+			"int main(int argc, char** argv){",
+    		"\tstd::string path = \"../Resources/Greenery.jpg\";",
+				"",
+    			"\tcv::Mat img = cv::imread(argv[1],-1);",
+				"",
+				"\tcv::namedWindow(\"img\", cv::WINDOW_AUTOSIZE);",
+    			"\tif( img.empty()) {",
+					"\t\tcv::imread(path, cv::IMREAD_COLOR);",
+					"\t\tif( img.empty()) {",
+						"\t\t\tstd::cout << \"No image provided\";",
+						"\t\t\treturn -1;",
+					"\t\t}",
+				"\t}",
+				"",
+				"\t// Do image processing here",
+				"",
+				"\tcv::imshow(\"img\",img);",
+				"\tcv::waitKey(0);",
+				"\tcv::destroyWindow(\"img\");",
+				"\treturn 0;",
+				"",
+			"}"
+			
+		],
+		"description": "Starting template for OpenCV programs"
+	},
+	"Empty OpenCV Template": {
+		"prefix": "EmptyCV",
+		"body": [
+			"#include <opencv2/opencv.hpp>",
+			"#include <stdio.h>",
+			"#include <iostream>",
+			"",
+			"",
+			"int main(int argc, char** argv){",
+				"\t",
+				"\t",
+				"\t",
+				"\t",
+				"\treturn 0;",
+				"",
+			"}"
+			
+		],
+		"description": "Starting template for OpenCV programs"
+	}
+}
