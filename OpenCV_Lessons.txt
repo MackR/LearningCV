@@ -86,4 +86,10 @@ Programming Practice Lessons Learned:
         8.08 You can define a float to a function parameter by typing the number and then putting a .f notation afterward (20.f)
         8.09 The character notation for tab is \t
         8.10 A dettached head in git is where your local git folder is pointing to an earlier commit, and you can do things with the commit, but it is not an official branch. If you leave the dettached head, you will lose changes, or you can change it into a branch.
-    9 August 25th, 2022: 46hr +=  
+    9 August 28th, 2022: 46hr +=  8  - Today is a culmination of a Thursday's Friday's and Sunday's efforts due to obligations the former two days
+        9.01 Callback functions for C++ programs pose interesting problems relating to variable passing. Casting Void pointers works, but if one needs multiple data pieces, they have to make a custom class just for passing data.  Try to find alternatives.
+        9.02 OpenCV provides excellent tools for image manipulation. If you want to combine three images together side by side, you get pointers to the columns desired, and set the columns equal to the images you want to copy. OpenCV does the rest
+        9.03 The difference between mouse events and flags are interesting. It provides double methods for passing data. Events only trigger on new movement/clicking, not constant signals. Events are mutually exclusive. Meanwhile, flags may all be used simulatenously
+        9.04 Image format is key, if you think something is wrong, look at image format first, then the column,row configurations
+        9.05 To concatenate strings, the "+" operator is very handy, but you still have to cast variables as strings.  the std::to_string() function is great for this with ints when needed. There may be better ways.
+        9.06 This summarizes the most obvious lessons for past few days.  Wrapping up IO and performing mastery exercises from past 8 chapters. Moving to tough computer vision concepts within next 2 days.

@@ -6,12 +6,13 @@ void interpretMouse(int event, int x, int y, int flags, void* img){
     
     cv::Mat img1 = *((cv::Mat*)img);
 
-    if(cv::EVENT_MOUSEMOVE == 0 || cv::EVENT_RBUTTONDOWN) {
-        if(flags & 1){
+    if(event == cv::EVENT_MOUSEMOVE || event == cv::EVENT_RBUTTONDOWN || event == cv::EVENT_LBUTTONDOWN) {
+        std::cout << "found event: " << event << " With flag: " << flags << "\n";
+        if(event == cv::EVENT_LBUTTONDOWN){
             cv::line(img1,{x,y},{x,y},color,2,8);
             
         }
-        else if(flags & 2){
+        else if( event == cv::EVENT_RBUTTONDOWN){
             color = img1.at<cv::Vec3b>(y,x);
             cv::Mat selectedColor(200,200,CV_8UC3,color);
             cv::namedWindow("Color Display", 1);
@@ -37,11 +38,11 @@ int main(int argc, char** argv){
     cv::ellipse(img,{rows*4/10,cols*4/10},{rows/20,cols/40},0,0,180,{255,0,0},2,8);
     // cv::fillConvexPoly(img,,{255,255,0},cv::LINE_AA);
     cv::namedWindow("img",1);
+    cv::setMouseCallback("img",interpretMouse, &img);
 
     for(;;){
     
     if (cv::waitKey(1) == 27) break; 
-    cv::setMouseCallback("img",interpretMouse, &img);
     cv::imshow("img",img);
 
     }
