@@ -74,16 +74,50 @@ void onMouse(int event, int x, int y, int flags, void *img)
         cv::Mat b_hist, g_hist, r_hist;
         std::vector<cv::Mat> bgr_planes;
 
-        cv::Mat roi(orig,selectionBox);
-        cv::Mat rectMask = cv::Mat::zeros(image->rows, image->cols, image->type());
-        rectMask(roi) = 1;
+        std::cout << "Pre-roi()" << std::endl;
+        cv::Mat rectMask = cv::Mat::zeros(image->rows, image->cols, CV_8U);
+        rectMask(selectionBox) = 1;
+        // std::cout << "rectMask: " << rectMask << std::endl;
+
+
+        std::cout << "Pre-split()" << std::endl;
         cv::split(orig, bgr_planes);
 
-        cv::calcHist( &bgr_planes[0],1, 0, rectMask, b_hist, 8, &histSize, &histRange);
+        std::cout << "Pre-calcHist()" << std::endl;
+
+
+        cv::calcHist( &bgr_planes[0],1, 0, rectMask, b_hist, 1, &histSize, 0);
+        cv::calcHist( &bgr_planes[1],1, 0, rectMask, g_hist, 1, &histSize, 0);
+        cv::calcHist( &bgr_planes[2],1, 0, rectMask, r_hist, 1, &histSize, 0);
+
+        std::cout << "Calculated Histograms!" << std::endl;
+
+        int hist_w = 512, hist_h = 400;
+        int bin_w = cvRound((double)hist_w/histSize);
+        cv::Mat histImg(hist_h, hist_w, CV_8UC3,cv::Scalar(0,0,0,0));
+        cv::normalize(b_hist,b_hist,0,hist_h,cv::NORM_MINMAX,-1,cv::Mat());
+        cv::normalize(g_hist,g_hist,0,hist_h,cv::NORM_MINMAX,-1,cv::Mat());
+        cv::normalize(r_hist,r_hist,0,hist_h,cv::NORM_MINMAX,-1,cv::Mat());
+
+        std::cout << "Normalized Histograms!" << std::endl;
+        
+
+        for (int i = 1; i < histSize; i++){
+            line(histImg, cv::Point(bin_w * (i-1), hist_h - cvRound(b_hist.at<float>(i-1))), 
+            cv::Point(bin_w * (i), hist_h - cvRound(b_hist.at<float>(i))), cv::Scalar(255,0,0),2,8,0);
+            line(histImg, cv::Point(bin_w * (i-1), hist_h - cvRound(g_hist.at<float>(i-1))), 
+            cv::Point(bin_w * (i), hist_h - cvRound(g_hist.at<float>(i))), cv::Scalar(0,255,0),2,8,0);
+            line(histImg, cv::Point(bin_w * (i-1), hist_h - cvRound(r_hist.at<float>(i-1))), 
+            cv::Point(bin_w * (i), hist_h - cvRound(r_hist.at<float>(i))), cv::Scalar(0,0,255),2,8,0);
+            
+        }
+        std::cout << "Drew Histograms!" << std::endl;
 
         cv::namedWindow("Histogram", 1);
-        cv::imshow("Histogram", histogramImg);
+        cv::imshow("Histogram", histImg);
         cv::moveWindow("Histogram", 400, 400);
+
+
     }
 }
 

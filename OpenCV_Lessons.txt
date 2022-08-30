@@ -100,4 +100,24 @@ Programming Practice Lessons Learned:
         10.04 When dereferencing passed information from a callback function, make sure you are aware of what variable you are modifying
         10.05 After drawing something, use imshow immediately.  It will help debug if wrong, and make things work if right
         10.06 Did research on what to learn for future.  Conclusion is PCL, Deep Learning setup (Keras? & Tensorflow?), and yolo perhaps. Stereo vision is valuable and pose estimation
-    11 August 30th, 2022: 60hr += 
+    11 August 30th, 2022: 60hr += 7  - Learned about warping images, erosion, dilation, sobel gradients, partial derivatives, gradient direction and magnitude and histograms
+        11.01 A separable kernel is one where you can break it up into 2 or 3 pieces that you multiply by eachother to calculate a filter.  the computation time is the different between 2n and n^2. So one should always try to separate filters
+        11.02 A sobel filter is a gradient filter that uses vertical or horizontal gradients.  It is generalizable in other ways. By calculating differences across kernels, you can find corners of images. This is like partial derivative in x and y directions
+        11.03 white hat operation isolates areas that are brighter than their surroundings. Black hat finds areas darker than surroundings
+        11.04 Dilation is where you take the maximum value found in a kernel and use it as the result of the convolution
+        11.05 Erosion is where you use the minimum value of a convolution and use it as the result
+        11.06 Opening and closing operations are combinations of the above two operations in different orders
+        11.07 There are multiple smoothing functions that all have similar results and perform in similar ways:
+            01. blur() is just an averaging over the kernel
+            02. medianBlur() is taking the median value over the kernel during convolution.  Good for noisy images
+            03. gaussianBlur() is a weighted kernel according to sigma values in x and y directions with different weights for each pixel in the kernel.  The anchor has highest weight value
+            04. bilateralFilter is different from gaussian and useful for image segmenting because although it is a weighted filter, it weights pixels in the kernel depending on their intensity similarity to the anchor's intensity. This preserves edges by encouraging only the uniform sections to smooth eachother out and not mix with other intensity sections
+        11.08 Depth of output is the variable value (CV_8U, CV_16U, etc...)
+        11.09 In opencv, a kernel is called a structuring element. To make my own kernel I can use cv::getStructuringElement()
+        11.10 Use cv::filter2D() to filter using your own kernels.  OpenCV is optimized for this, DON'T DO IT MANUALLY
+        11.11 Histograms are useful for categorizing data from images. This statistical interpretation can be useful for image identification. Histograms can function in multiple dimensions. Need more learning here
+        11.12 You can warp an image by using warp matricies. This is like in mechanical engineering where we would rotate coordinate frames by multiplying by the correct rotation matrix.  This can be done by multiplying over an entire matrix to scale, rotate, skew and perform many other operations
+        11.13 Histograms should be normalized in order to work with their data.  It makes it all easier. 
+        11.14 Arrow keys have no assigned ascii values and are simply interpretted by a program in windows.  This explained why online video games always use WASD
+        11.15 cv::warpAffine() can do the warping with simple 2x2 matrices.  But to do more complex "perspective" warping, one needs a 3x3 matrix
+        
