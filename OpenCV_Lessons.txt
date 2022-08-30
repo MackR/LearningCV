@@ -93,3 +93,11 @@ Programming Practice Lessons Learned:
         9.04 Image format is key, if you think something is wrong, look at image format first, then the column,row configurations
         9.05 To concatenate strings, the "+" operator is very handy, but you still have to cast variables as strings.  the std::to_string() function is great for this with ints when needed. There may be better ways.
         9.06 This summarizes the most obvious lessons for past few days.  Wrapping up IO and performing mastery exercises from past 8 chapters. Moving to tough computer vision concepts within next 2 days.
+    10 August 29th, 2022: 54hr += 6 - Histograms, fillConvexPoly(), addWeighted(), drawing functions
+        10.01 When inputting parameters, if the function calls for a &var, this means it will auto retrieve the address of the variable and not make a new variable to work with.  Input the variable as desired in regular form
+        10.02 Histograms categorize data into bins which are used for statistics.  Normalizing histograms is a good Practice
+        10.03 One image processing technique is to redistribute the color lightness values in an image. People can see 700-900 greyscales.  Often images are too dark for people to see, so redistributing will make images more visible and useful, providing "Night vision"
+        10.04 When dereferencing passed information from a callback function, make sure you are aware of what variable you are modifying
+        10.05 After drawing something, use imshow immediately.  It will help debug if wrong, and make things work if right
+        10.06 Did research on what to learn for future.  Conclusion is PCL, Deep Learning setup (Keras? & Tensorflow?), and yolo perhaps. Stereo vision is valuable and pose estimation
+    11 August 30th, 2022: 60hr += 
