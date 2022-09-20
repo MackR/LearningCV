@@ -21,7 +21,13 @@ int main(int argc, char** argv){
     if( src1.empty()) {
         src1 = cv::imread(path, cv::IMREAD_COLOR);
         src2 = cv::imread(path2, cv::IMREAD_COLOR);
-        
+    }
+
+        if( src1.empty()) {
+            std::cout << "No image provided";
+            return -1;
+        }
+
         cv::pyrDown(src1,src1);
         cv::pyrDown(src1,src1);
         // cv::pyrDown(src1,src1);
@@ -30,11 +36,8 @@ int main(int argc, char** argv){
         cv::pyrDown(src2,src2);
         // cv::pyrDown(src2,src2);
         src2.adjustROI(-200,0,0,0);
-        if( src1.empty()) {
-            std::cout << "No image provided";
-            return -1;
-        }
-    }
+
+
 
     // Do image processing here
     cv::absdiff(src1, src2, diff12);
