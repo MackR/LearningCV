@@ -127,4 +127,27 @@ Programming Practice Lessons Learned:
         12.04 Shifting two slightly skewed images to realign them is not super easy, it requires summing of the entire image and checking minimums
             12.04.01 Operation is similar to convolution. Could you use a convolution to complete? What about a convolution between two images?
         12.05 Morphological gradients use dilation and erosion to clean up images and then highlight an objects outline. This is good because it does it over the whole image and on parts a sobel filter might miss.
+    13 September 20th 2022: 71hr += 8 - Continued work on the spot the difference program. Could improve it by adding ROI box to main differences. Learned Viola-Jones face detect algorithm concepts
+        13.01 It is extremely important that you format whatever data you get when you first start a program. Once the data is formatted, issues won't cascade.
+        13.02 You can pad an image by making a larger one and copying the data from the original into it. This allows you to shift the second image around ontop of the first one for alignment
+        13.03 Resizing an image is a possible way to evaluate results over a large image. It provides noisy feedback but has some merit
+        13.04 Another great way to get feedback is to evaluate what you want on a small part of the image, and once you get your result, apply your steps to the entire image only once
+        13.05 Calculating integral images is a way to take an N^2 operation and make it 0(N). Integral images are used for summing/scanning large images for their features. Need to Practice more
+        13.06 It is incredibly useful to visualize each step along the way to your result. Do small checks of each image processing steps along the way using imshow and waitKey(0). Much better than std::cout
+        13.07 Thresholding is a great way to remove noise from a system. the closing() process isn't as good for cleaning up if the difference between noise and signal isn't strong
+        13.08 Using a small mat variable of a large image is a great way to examine small portions of an image for calculation, and it provides it's own padding along the edges
+        13.09 Use constants more often!
+        13.10 Using the function morphologicalEx() I can access the blackhat, whitehat, opening, and closing methods, and more. Opening seems to clean up the image better than doing the individual operations themselves.
+        13.11 Opening method appears to be really good at identifying whole objects with color changes, but small lines will be lost in the process.
+    14 October 3rd, 2022: 79hr += 8 - 
+        14.01 Smoothing functions don't have masks naturally, but you can make your own mask by separating the masked region into its own image, then blurring that portion, then masked addition/assignment back into the original photo, and it will achieve the same effect
+        14.02 Flood fill function is great for comparing connected regions of a mask or even natively in an image. It will retrieve area for you and you can use it to remove "noise" objects from an image. Or to filter for certain size objects. VERY useful
+        14.03 HSV representation is good for picking out blue regions of a picture, or any specific color region you are looking for. Threshold functions are important for masks
+        14.04 Can use bitwise functions with masks to expand or filter their regions. I used it for combining a saturation strength filter with the blue hue to find regions that were more blue than other regions 
+        14.05 Top hat function has some usefulness in finding corners of a room, but only if lighting gradients are strong.  Still need to learn pointcloud for better sensing
+        14.06 Super important to order the row and col settings right, it easily breaks a program, and opencv isn't consistent
+        14.07 It might be possible to create adaptive filters for specific color types
+        14.08 Imshow does not accept HSV images, they must be converted back to orignal BGR
+        14.09 Almost done with chapter 10 exercises and lessons. There are 18 exercises!
+
         
