@@ -149,5 +149,7 @@ Programming Practice Lessons Learned:
         14.07 It might be possible to create adaptive filters for specific color types
         14.08 Imshow does not accept HSV images, they must be converted back to orignal BGR
         14.09 Almost done with chapter 10 exercises and lessons. There are 18 exercises!
+    15 October 4th, 2022: 87hr += 6 - 
+        15.01 There is something wrong about the add function where if you try to add 
 
         
