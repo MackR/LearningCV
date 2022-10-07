@@ -36,9 +36,9 @@ int main(int argc, char** argv){
     }
 
     // Format image here
-    cv::Mat fImg = img.clone();
+    cv::Mat fImg = img.clone(), fImgBW;
     cv::resize(fImg,fImg,cv::Size(600,600));
-    cv::cvtColor(fImg,fImg,cv::COLOR_BGR2GRAY);
+    cv::cvtColor(fImg,fImgBW,cv::COLOR_BGR2GRAY);
 
 
     // Process image here
@@ -53,35 +53,44 @@ int main(int argc, char** argv){
     // cv::Laplacian(proc1,proc1,CV_8U);
     // cv::Scharr(proc1,proc1,CV_8U,0,1);
     //cv::boxFilter(proc1,proc1,-1,cv::Size(3,3));
-    // cv::morphologyEx(proc1,proc1,cv::MORPH_CLOSE,cv::Mat());
-    // cv::dilate(proc1,proc1,cv::Mat());
-    cv::Canny(proc1,proc1,50,55);
+    cv::morphologyEx(fImgBW,proc1,cv::MORPH_OPEN,cv::Mat(),cv::Point(-1,-1),2);
+    // cv::erode(proc1,proc1,cv::Mat());
+    // cv::imshow("result",proc1);
+    // cv::waitKey(0);
+    // cv::erode(proc1,proc1,cv::Mat());
+    cv::Canny(proc1,proc1,60,60);
+    // cv::dilate(proc1,proc1, cv::Mat());
+    // cv::findContours(proc1,proc1,cv::RetrievalModes)
     // cv::Sobel(proc1,proc1,CV_8U,1,0);
     // cv::Sobel(proc2,proc2,CV_8U,0,1);
     cv::compare(proc1,0,edgeMask,cv::CMP_NE); // create a mask by finding where edges are
-    cv::threshold(edgeMask,edgeMask,1,255,cv::THRESH_BINARY);
-    cv::dilate(edgeMask,edgeMask, cv::Mat());
-    cv::dilate(edgeMask,edgeMask, cv::Mat());
-    cv::compare(edgeMask,0,interiorMask,cv::CMP_EQ); // get the inverse of the edge mask
+    // cv::threshold(edgeMask,edgeMask,1,255,cv::THRESH_BINARY);
+    // cv::dilate(edgeMask,edgeMask, cv::Mat());
+    cv::pyrMeanShiftFiltering(fImg,result,30,30,0);
+    result.setTo(0,proc1);
+    cv::add(result, fImg,result,edgeMask);
+    // cv::dilate(edgeMask,edgeMask, cv::Mat());
+    // cv::compare(edgeMask,0,interiorMask,cv::CMP_EQ); // get the inverse of the edge mask
 
-    cv::imshow("interiors",edgeMask);
-    cv::imshow("edges",interiorMask);
-    cv::waitKey(0);
+    cv::imshow("interiors",proc1);
+    cv::imshow("result",result);
+    // cv::imshow("edges",interiorMask);
+    // cv::waitKey(0);
 
-    cv::Mat interiors = fImg.clone();
-    cv::boxFilter(interiors,interiors,CV_8U,cv::Size(9,9)); // blur an image
-    cv::imshow("interiors",interiors);
-    cv::waitKey(0);
+    // cv::Mat interiors = fImg.clone();
+    // cv::boxFilter(interiors,interiors,CV_8U,cv::Size(9,9)); // blur an image
+    // cv::imshow("interiors",interiors);
+    // cv::waitKey(0);
 
-    interiors.setTo(0,edgeMask);
+    // interiors.setTo(0,edgeMask);
 
-    cv::Mat edges = fImg.clone();
-    edges.setTo(0,interiorMask); 
+    // cv::Mat edges = fImg.clone();
+    // edges.setTo(0,interiorMask); 
 
-    std::cout << "Showing the image with the edges set to 0" << std::endl;
-    cv::imshow("interiors",interiors);
-    cv::imshow("edges",edges);
-    cv::waitKey(0);
+    // std::cout << "Showing the image with the edges set to 0" << std::endl;
+    // cv::imshow("interiors",interiors);
+    // cv::imshow("edges",edges);
+    // cv::waitKey(0);
 
     // cv::threshold(proc1,proc1,50,255,cv::THRESH_TOZERO);
     // cv::threshold(proc2,proc2,50,255,cv::THRESH_TOZERO);
@@ -94,14 +103,20 @@ int main(int argc, char** argv){
     // cv::imshow("proc1",proc1);
     // cv::waitKey(0);
     // cv::boxFilter(proc2,proc2,-1,cv::Size(5,5));
-    cv::add(interiors,edges,result);
+    // cv::add(interiors,edges,result);
     std::cout << "Showing the images combined with good edges" << std::endl;
-    cv::imshow("interiors",interiors);
-    cv::imshow("original",fImg);
-    cv::imshow("edges",edges);
-    cv::imshow("result",result);
+    // cv::imshow("interiors",interiors);
+    // cv::imshow("original",fImg);
+    // cv::imshow("edges",edges);
+    // cv::imshow("result",result);
     cv::waitKey(0);
     cv::destroyAllWindows();
     return 0;
 
 }
+
+// Finished doing meanshiftSegmentation. It's an interesting concept, grouping all colors into
+// categories and then assigning all the colors that hit the maxima or modes as they like to call them
+// into whatever maxima they reach. Finnicky about the color radius and distance radius. 
+// The pyr parameter I think determines how many times to pyramid down the image and do the processing from there.
+// This makes the whole process faster and allows the image to rescale back up and have better speed. and simultaneously reblend everything together 

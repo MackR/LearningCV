@@ -156,14 +156,24 @@ Programming Practice Lessons Learned:
         15.04 Using the two different partial derivatives of the sobel filter might be good, and then combining them together for edge detection, but it needs some work.
         15.05 Set to function has a masking feature, which is incredibly useful img.setTo(0, mask) makes everything in the mask 0!
         15.06 Fewer hard set lessons learned yesterday, but more general learning about how to code, structure, what algorithms to use, and how to make good outputs
-        15.07 Dveloped my own first use for typedef keyword by creating a scanning snippet that goes through an image pixel by pixel, using the PIXEL as the special type which could be any size depending on the image!
+        15.07 Developed my own first use for typedef keyword by creating a scanning snippet that goes through an image pixel by pixel, using the PIXEL as the special type which could be any size depending on the image!
     16 October 5th, 2022: 93hr += 6 - Day of going back to the basics and practicing inheritance, classes, header & implementation files, vectors, maps, and ENUMs. No changes within OpenCV. 
         16.01 Practiced classes and inheritance along with structs and default constructors
         16.02 Vector, map, and ENUM practice, brushing up on skills
         16.03 Reminder of header files and implementation files setup. 
         16.04 Learning lessons of how to work with math and remind myself to think about edge cases and how they clash with normal use cases.
-    17 October 6th, 2022: 99hr +=   - Getting back to OpenCV! Hitting the 100hr mark!
-        17.01 
+    17 October 6th, 2022: 99hr +=  6 - Getting back to OpenCV! Hitting the 100hr mark! TIL pyrMeanShiftSegmentation and how segmentation works within feature-spaces in general
+        17.01 Learned pyrMeanShiftSegmentation and how they use feature space density functions to segment colors. 
+            The issue with this is if you pick too broad of a density function, or too narrow, you cannot converge on a maxima or mode
+            The parameters of this function are very sensitive. The pyr feature decides how much the image is shrunk before calculation
+        17.02 Feature spaces are useful for classification of objects and can be used with infinite numbers of features.  I believe they are used in machine learning
+        17.03 I learned how to make my own kernel, you can do this with the command:
+            cv::Mat1f k = (cv::Mat1f(5,5)<< 0,0,0,0,0,0... ) where you input all the kernel weights
+        17.04 Kernels are best created by using zero sum kernel weights in order for the pictures to not become too bright.
+        17.05 Often, if the weights are less than 0 total, the image will be black after filtering
+        17.06 Use filter2D() in order to input your own kernel and filter an image
+        17.07 To make a 45 degree line filter, you often have to put the weights in the kernel orthogonal to the line direction that you want, so that the filter will find big differences along the edges.
+        17.08 
     
 
         
