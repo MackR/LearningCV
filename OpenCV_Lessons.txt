@@ -173,7 +173,17 @@ Programming Practice Lessons Learned:
         17.05 Often, if the weights are less than 0 total, the image will be black after filtering
         17.06 Use filter2D() in order to input your own kernel and filter an image
         17.07 To make a 45 degree line filter, you often have to put the weights in the kernel orthogonal to the line direction that you want, so that the filter will find big differences along the edges.
-        17.08 
+    18 October 7th 2022: 105hr += 5 Today I learned about the Laplacian operator and how it can kinda be used to pick out eyes in image
+        18.01 The laplacian operator can be used to pick out eyes (sorta) in images. The book says it prefers a bright region in center and dark areas around, HOWEVER, after interpretting the laplacian filter myself, it appears to like dark centers and bright surroundings
+        18.02 I can adjust the laplacian kernel size and it changes detection. Big kernel == big lines at edjes. Small kernel = small edge details.  The closing operation may prove useful in removing noise for laplacian
+        18.03 Should consider pyrDown the image before applying laplacian in order to find pupils.  But need some way of scaling back up and translating small image coordinates to large image
+        18.04 Maybe I can make my own laplacian kernel that is bigger and spread out to make it work on larger images?
+        18.05 Histogram equalization is how you take an image that was captured with poor sensor range, and you spread out the inputs to the full range of the display resource, allowing the image to look better, and compensate for poor capture quality (darks are darker, whites are whiter)
+            18.05.01 - equalizeHist() does this quite well
+        18.06 Chapter covers resize(), but also affine and perspective transfomations. Affine transformations are simple and often maintain the image's integrity by only warping it in parallelogram ways
+        18.07 Chapter also covered inpainting, but no exercises completed yet.
+    19 October 11th, 2022: 110hr += 
+        19.01 
     
 
         
