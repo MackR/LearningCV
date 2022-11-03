@@ -182,8 +182,20 @@ Programming Practice Lessons Learned:
             18.05.01 - equalizeHist() does this quite well
         18.06 Chapter covers resize(), but also affine and perspective transfomations. Affine transformations are simple and often maintain the image's integrity by only warping it in parallelogram ways
         18.07 Chapter also covered inpainting, but no exercises completed yet.
-    19 October 11th, 2022: 110hr += 
-        19.01 
+    19 November 1st, 2022: 110hr += 4hr  - First day back from trip doing OpenCV work. Learned to use log polar transformation function and histogram equalization in E2 and E7. Chpt 12 E2 is Hough line setup and circles
+        19.01 - Wrote a mouse controlled program to manipulate an image and where the log polar transformation is performed - Chpt11 E2
+        19.02 - Histogram equalization on an MRI image using simple function
+        19.03 - The hough line finder and circle use the feature space representation of their parameters to find repeated locations of a line and find them in an image
+            19.03.01 - Feature space is incredibly interesting. Representing a point as a locus for potential line in a space
+        19.04 - Learned about fourier transform in an image, and how it's used to remove high frequency noise from image
+        19.05 - Fourier transform finds the different frequency components of an image and changes it's representation to frequency space. You can represent any image as a decomposition of frequencies.
+    20 November 2nd, 2022: 114hr += 6hr - Applied grabcut algorithm by making mouse controlled region that picks out section of image, removes background, inpaints the foreground and displays equalizedHist image
+        20.01 - Grabcut is an algorithm that estimates foreground and background of an image and creates numbered mask of them
+        20.02 - Inpainting applied on images of people to try and remove them from images. People are too big, even on easy images. Easy algorithm through
+        20.03 - Used equalizeHist to see the mask the grabCut created. Their original brightness values were 1,2,3 (invisible), equalizeHist revealed them and scales the numbers up
+        20.04 - Histograms are statistical tools to interpret the summmation of data over an image. Backproject is good for histogram matching parts of images
+        20.05 - Backproject best as HSV values. The OpenCV does a lot of histogram work for the user. Not too complicated. 
+        
     
 
         
