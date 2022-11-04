@@ -195,7 +195,15 @@ Programming Practice Lessons Learned:
         20.03 - Used equalizeHist to see the mask the grabCut created. Their original brightness values were 1,2,3 (invisible), equalizeHist revealed them and scales the numbers up
         20.04 - Histograms are statistical tools to interpret the summmation of data over an image. Backproject is good for histogram matching parts of images
         20.05 - Backproject best as HSV values. The OpenCV does a lot of histogram work for the user. Not too complicated. 
-        
-    
+    21 November 4th, 2022: 120hr += 6 - Learned how to work with histograms and evaluate image similarity based on simple comparison methods
+        21.01 - matchTemplate() takes a small piece of an image that you want to find within a big image and it slides it over the image, doing section comparisons with the squared error. Then returns a 2D histogram showing match strenght over the image
+        21.02 - Use minMaxLoc() to find the greatest histogram bin value. 
+        21.03 - compareHist() compares two histograms together by comparing the number of values lumped into each bin. Rough calculation ability. 
+        21.04 - Important to normalize histogram data before using it for further calculations. Similar to ML training and test data
+        21.05 - When bin width gets larger for these histogram comparisons, the "similarity" between histograms increases a lot. But this is because it's hard to be different when you only have 2 categories to choose from
+        21.06 - EMD isn't a very good comparison. It just looks at groupings of colors and says if images are the same based on color
+        21.07 - Learned about Signatures for EMD calculation. It just wants the histogram listed as (Value, col, row, (z,...etc)) in each row
+        21.08 - Started work on backProjection given a histogram calc of flesh colored images. Not finished yet, something not working
+    22 November 5th, 2022: 126hr +=     
 
         
