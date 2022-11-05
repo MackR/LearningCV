@@ -6,14 +6,15 @@ int main(int argc, char** argv){
 
     cv::namedWindow("Example3", cv::WINDOW_AUTOSIZE);
     cv::VideoCapture cap;
-    cap.open( std::string(argv[1])); //open a video camera?
+    cap.open(0); //open a video camera?
 
     cv::Mat frame;
     for(;;){
         cap >> frame; // take what's in capture and output it to the frame
         if(frame.empty()) break;
+        cv::pyrDown(frame,frame);
         cv::imshow("Example3",frame);
-        if(cv::waitKey(33) >= 0) break;
+        if(cv::waitKey(10) >= 0) break;
     }
     
     

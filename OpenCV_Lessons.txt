@@ -204,6 +204,26 @@ Programming Practice Lessons Learned:
         21.06 - EMD isn't a very good comparison. It just looks at groupings of colors and says if images are the same based on color
         21.07 - Learned about Signatures for EMD calculation. It just wants the histogram listed as (Value, col, row, (z,...etc)) in each row
         21.08 - Started work on backProjection given a histogram calc of flesh colored images. Not finished yet, something not working
-    22 November 5th, 2022: 126hr +=     
+    22 November 5th, 2022: 126hr += 12hr - Worked on the backProjection project, successfully got it working!
+        22.01 - When doing backprojection, you need to take a small color sample, and then get the program to match that to other regions. Can't take a large varying color sample
+        22.02 - Normalization has many methods. Linear, L1, L2, and more. Need to research their effects more, have basic understanding
+        22.03 - The sobel operators give information to OpenCV about direction, +/- X and Y directions
+        22.04 - Phase is useful with sobel X and Y derivatives. Magnitude as well. 
+        22.05 - Reminder: You can invert a mask using cv::bitwise_not(mask, invertedMask); Useful!
+        22.06 - Before finding edges, do the edge filter on the whole image, then mask the parts you want
+        22.07 - Large kernel gaussian filter goes a really long way to remove noise before sobel operations
+        22.08 - OpenCV calculates phase angle for sobel going from dark region to light region as clockwise from the x axis.
+        22.09 - Use the mat.convertTo(type, scale*multiplier) function to make your images into any format. 
+            Beware of the range of the values!
+        22.10 - HSV for 32F images: H is from 0-360, NOT 0-180 like in CV_8U images. 
+            32F - {0-360, 0-1, 0-1} - I think. CV_8U - {0-180, 0-255, 0-255};
+        22.11 - Merge function requires a vector of arrays preassembled for it to work
+        22.12 - backProject works well in the right lighting conditions, beware general use through
+        22.13 - Use morphologicalEx(CLOSING) for small noise, but big noise might need floodfill iteration or connectedComponents() and zero anything below certain size.
+        22.14 - BGR is unsuccessful with backprojection. Probably because hue does such a good job encapsulating the meaning of color in one number. Easy for programs.
+        22.15 - findContours() is a great function that gives you vectors of contours which are vectors of points.  Tells you biggest contour and smaller ones.
+        22.16 - I should start designing user friendly functions for easy application of various algorithms to see effectiveness
+        22.17 - Threshold very useful for eliminating invisible noise
+        22.18 - cv::VideoCapture cap;  cap.open(0) is successful with my video camera 
 
         
