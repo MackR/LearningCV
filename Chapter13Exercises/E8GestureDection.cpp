@@ -1,18 +1,22 @@
 #include <opencv2/opencv.hpp>
 #include <stdio.h>
 #include <iostream>
+#include "../CustomTools.cpp"
+
+
 
 int main(int argc, char **argv)
 {
 
     std::string paths[] = {"", "", "", "", ""};
-    std::string path2 = "../Resources/ThumbUp.jpg";
+    std::string path2 = "../Resources/Arm2.jpg";
     cv::Mat imgs[2];
-    cv::Mat img2;
+    cv::Mat img2, fImg2, fImg2HSV, fImg2GRAY, fImg2BGR;
 
     img2 = cv::imread(path2);
-    cv::resize(img2, img2, cv::Size(600, 600));
-    cv::cvtColor(img2, img2, cv::COLOR_BGR2HSV);
+    cv::resize(img2, fImg2, cv::Size(600, 600));
+    cv::cvtColor(fImg2, fImg2HSV, cv::COLOR_BGR2HSV);
+    fImg2BGR = fImg2.clone();
 
     for (int i = 2; i <= 3; ++i)
     {
@@ -75,100 +79,51 @@ int main(int argc, char **argv)
     // cv::Mat frame;
 
         // cv::resize(img2, img2, cv::Size(600, 600));
-        cv::pyrDown(img2,img2);
-        cv::calcBackProject(&img2, 2, dims, histOut, backProject, ranges);
+        cv::calcBackProject(&fImg2HSV, 2, dims, histOut, backProject, ranges);
 
-        cv::imshow("img2", backProject);
-        cv::waitKey(0);
+        DISPLAYIMAGE(backProject); // Macro that gets the name of my variable and calls displayImages("img", img)
 
-        cv::morphologyEx(backProject, backProject, cv::MORPH_OPEN, cv::Mat());
+        cv::morphologyEx(backProject, backProject, cv::MORPH_OPEN, cv::Mat()); // gets rid of white noise
+        DISPLAYIMAGE(backProject); // Macro that gets the name of my variable and calls displayImages("img", img)
         //cv::equalizeHist(backProject,backProject);
         // cv::imshow("img2", backProject);
         // cv::waitKey(0);
         // cv::threshold(backProject,backProject,cv::THRESH_OTSU,255,cv::THRESH_BINARY);
-        cv::threshold(backProject,backProject,100,255,cv::THRESH_BINARY);
-        // cv::imshow("img2", backProject);
-        // cv::waitKey(0);
+        cv::threshold(backProject,backProject,100,255,cv::THRESH_BINARY); // If probability is below 100/255, make it zero, otherwise, make it 100%
+        DISPLAYIMAGE(backProject); // Macro that gets the name of my variable and calls displayImages("img", img)
 
-        uchar pixel = 0;
-    int areaPrime = 0, area = 0;
-    std::pair<int, int> location(0,0), locationPrime(0,0);
-    for (int row = 0; row < backProject.rows; ++row)
-    {
-        for (int col = 0; col < backProject.cols; ++col)
-        {
-            pixel = backProject.at<uchar>(row, col);
-            if (pixel >= 200)
-            {   
-                //diff1.at<uchar>(row, col) = 0;
-                area = cv::floodFill(backProject, cv::Point(col, row), 100);
 
-                if (area < areaPrime)
-                {
-                    cv::floodFill(backProject, cv::Point(col, row), 0);
-                    std::cout << "Not a larger zone, moving on" << std::endl;
-                }
-                else if (area > areaPrime)
-                {   
-                    std::cout << "New area found, reassigning. Old area, new area: " << areaPrime << ", " << area << std::endl;
-                    areaPrime = area;
-                    cv::floodFill(backProject, cv::Point(locationPrime.first, locationPrime.second), 0);
-                    locationPrime.first = col;
-                    locationPrime.second = row;
-                }
-                else if (area == areaPrime){
-                    std::cout << "Areas are equal, do nothing" << std::endl;
-                }
-                else
-                    std::cout << "Error, else condition reached, previously thought impossible" << std::endl;
-                // std::cout << "Working on it, row, col, val: " << row << ", " << col << ", " << (int)pixel << std::endl;
+        floodFillLargestRegion(backProject,backProject); // Function within CustomTools.cpp
 
-                // cv::imshow("img2",backProject);
-                // cv::waitKey(0);
+        DISPLAYIMAGE(backProject);
 
-            }
-        }
-    }
         cv::Mat mask;
-        cv::floodFill(backProject, cv::Point(locationPrime.first, locationPrime.second), 255);
         cv::morphologyEx(backProject, mask, cv::MORPH_DILATE, cv::Mat(),cv::Point(-1,-1), 7);
 
+        std::vector<cv::Mat> imgs2 = {fImg2, backProject, mask};
+        std::vector<std::string> names = { "fImg2", "backProject", "mask"};
 
-
-        std::cout << "Image processing complete" << std::endl;
-
-        // cv::equalizeHist(backProject,backProject);
-
-        cv::namedWindow("img2", cv::WINDOW_AUTOSIZE);
-        cv::namedWindow("orig", cv::WINDOW_AUTOSIZE);
-
-        cv::imshow("orig", img2);
-        cv::imshow("img2", backProject);
-        cv::imshow("img3", mask);
-        cv::waitKey(0);
-        cv::destroyAllWindows();
+        displayImages(imgs2, names); // CustomTools.cpp // Accepts imgs as array and names as vector
 
         cv::Mat masked = img2.clone();
         cv::Mat inverseMask;
-        cv::Mat dx, dy, angle, gray, magnitude;
+        cv::Mat dx, dy, angle, magnitude;
         cv::bitwise_not(mask,inverseMask);
-        masked.setTo(0, inverseMask);
+        //masked.setTo(0, inverseMask); // just as good at bitwise_and mask
         cv::Mat circle = cv::imread("../Resources/circle2.png",cv::IMREAD_COLOR);
         cv::pyrDown(circle,circle);
-        cv::cvtColor(img2,gray,cv::COLOR_BGR2GRAY);
-        cv::GaussianBlur(gray,gray,cv::Size(9,9),0);
-        cv::threshold(gray,gray,80,255,cv::THRESH_TOZERO);
-        cv::Sobel(gray,dx,CV_32F,1,0);
-        cv::Sobel(gray,dy,CV_32F,0,1);
+        cv::cvtColor(fImg2BGR,fImg2GRAY,cv::COLOR_BGR2GRAY);
+        cv::GaussianBlur(fImg2GRAY,fImg2GRAY,cv::Size(9,9),0);
+        DISPLAYIMAGE(fImg2GRAY);
+        cv::threshold(fImg2GRAY,fImg2GRAY,80,255,cv::THRESH_TOZERO);
+        cv::Sobel(fImg2GRAY,dx,CV_32F,1,0);
+        cv::Sobel(fImg2GRAY,dy,CV_32F,0,1);
 
         // cv::threshold(dx,dx,25,255,cv::THRESH_TOZERO);
         // cv::threshold(dy,dy,25,255,cv::THRESH_TOZERO);
 
-        cv::imshow("dx",dx);
-        cv::imshow("dy",dy);
-        cv::waitKey(0);
-        cv::destroyAllWindows();
-
+        displayImages(std::vector<cv::Mat> {dx,dy}, {"dx", "dy"});
+        
         cv::phase(dx,dy,angle,true);
         angle.convertTo(angle,CV_32FC1, 1.0/360.0);
         //cv::normalize(angle,angle,255,0,cv::NORM_L2);
@@ -177,11 +132,10 @@ int main(int argc, char **argv)
         // cv::normalize(magnitude,magnitude,1,0,cv::NORM_L2);
         // cv::equalizeHist(angle,angle);
         // cv::equalizeHist(magnitude,magnitude);
-        cv::imshow("phase",angle);
-        //cv::imshow("magnitude",magnitude);
-        cv::waitKey(0);
-        cv::destroyAllWindows();
-        angle = angle/2; // Element wise divide the angle by two because the hue range is 0-180, not 360
+        DISPLAYIMAGE(angle);
+
+
+        
         cv::Mat colorMapAngle = angle.clone();
         cv::normalize(colorMapAngle,colorMapAngle,360,0,cv::NORM_MINMAX);
         //std::cout << colorMapAngle << std::endl;
@@ -194,9 +148,7 @@ int main(int argc, char **argv)
         cv::merge(combo,result);
         cv::cvtColor(result,result,cv::COLOR_HSV2BGR);
 
-        cv::imshow("result", result);
-        cv::waitKey(0);
-        cv::destroyAllWindows();
+        DISPLAYIMAGE(result);
         // cv::imshow("img2",img2);
 
     cv::destroyAllWindows();

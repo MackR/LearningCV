@@ -204,7 +204,7 @@ Programming Practice Lessons Learned:
         21.06 - EMD isn't a very good comparison. It just looks at groupings of colors and says if images are the same based on color
         21.07 - Learned about Signatures for EMD calculation. It just wants the histogram listed as (Value, col, row, (z,...etc)) in each row
         21.08 - Started work on backProjection given a histogram calc of flesh colored images. Not finished yet, something not working
-    22 November 5th, 2022: 126hr += 12hr - Worked on the backProjection project, successfully got it working!
+    22 November 4th, 2022: 126hr += 12hr - Worked on the backProjection project, successfully got it working!
         22.01 - When doing backprojection, you need to take a small color sample, and then get the program to match that to other regions. Can't take a large varying color sample
         22.02 - Normalization has many methods. Linear, L1, L2, and more. Need to research their effects more, have basic understanding
         22.03 - The sobel operators give information to OpenCV about direction, +/- X and Y directions
@@ -225,5 +225,23 @@ Programming Practice Lessons Learned:
         22.16 - I should start designing user friendly functions for easy application of various algorithms to see effectiveness
         22.17 - Threshold very useful for eliminating invisible noise
         22.18 - cv::VideoCapture cap;  cap.open(0) is successful with my video camera 
+    23: November 6th, 2022 138hr += 6 - Built custom functions for image processing to make my work faster and easier to read. Tools can be found in CustomTools.cpp. Learned about many new C++ concepts, listed below.
+        23.01 - Function pointers: A function name itself is just a pointer, and sometimes these are useful. Example below:
+            23.01.1 - Desired function to point to: int Foo(int name) {}
+            23.01.2 - Pointer to above function int (*fooPtr)(int); // The pointer to a function of type Foo
+            23.01.3 - fooPtr = &Foo;  // assigning the address of function Foo to fooPtr
+            23.01.4 - Then I can use the ptr function like this: fooPtr(5) and it will call correctly.
+        23.02 - Array pointer decay: An array name is just the pointer to the first object in its array.
+            23.02.01 - Caveat: Before the pointer is passed to a function, the array name contains the type of the array and can describe how big it is. Once it is passed to a function, it becomes a basic pointer
+        23.03 - Keyword EXTERN has many uses. One of them is to tell the linker that a variable has been declared elsewhere already and that it should go find the variable
+            Example: file a.cpp: int i = 43;  file b.cpp: extern int i; // In file b, it knows to look elsewhere for variable
+        23.04 - The static keyword when used with global variables causes the variable to have internal linkage, meaning it is only seen within the local file or "translation unit" as they call it
+        23.05 - The preprocessor is a feature that looks through a program before compiling it and performs certain actions called "directives". This is also used to decide what to compile in programs
+            Example: I used this - #define DISPLAYIMAGE displayImages(img, #img) - because I have an overloaded function called displayImages that displays one or many images
+        23.06 - I discovered it is impossible to know the name of the function or variable you have in your program just by looking at it's pointer/address. As expected. C++ doesn't have this type of introspection
+        23.07 - Macros cannot be overloaded. 
+        23.08 - Using sizeof(array)/sizeof(array[0]) doesn't work after the array is passed to function because of array to pointer decay
+        23.09 - std::function can be used more easily for function pointers, although I haven't tried it yet.
+    24: November 7th, 2022 - 144hr += 
 
         

@@ -9,23 +9,17 @@
 	"ScanImage": {
 		"prefix": "scanImage",
 		"body": [
+		"cv::Mat scan = INSERT_IMAGE.clone();",
 		"typedef uchar PIXEL_T;",
 		"PIXEL_T pixel = 0;",
-		"const int AREA_FILTER = 100;",
-    	"for (int row = 0; row < proc1.rows; ++row){",
-			"\tfor (int col = 0; col < proc1.cols; ++col){",
-				"\t\tpixel = proc1.at<PIXEL_T>(col,row);",
-            	"\t\tint area = 0;",
-            	"\t\tif (pixel == 255){",
-					"\t\t\tarea = cv::floodFill(proc1,cv::Point(col,row),100);",
-                	"\t\t\tif (area < AREA_FILTER){",
-						"\t\t\t\tcv::floodFill(proc1,cv::Point(col,row),0);",
-					"\t\t\t}",
-                	"\t\t\tcv::imshow(\"proc1\",proc1);",
-                	"\t\t\tcv::waitKey(0);",
+    	"for (int row = 0; row < scan.rows; ++row){",
+			"\tfor (int col = 0; col < scan.cols; ++col){",
+				"\t\tpixel = scan.at<PIXEL_T>(col,row);",
+				"\t\t// Perform pixel operation here",
 				"\t\t}",
-			"\t}",
-    	"}"
+				"\t}",
+				"cv::imshow(\"scan\",scan);",
+				"cv::waitKey(0);",
 		],
 		"description": "Log output to console"
 	}
