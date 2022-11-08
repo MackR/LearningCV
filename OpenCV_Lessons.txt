@@ -242,6 +242,34 @@ Programming Practice Lessons Learned:
         23.07 - Macros cannot be overloaded. 
         23.08 - Using sizeof(array)/sizeof(array[0]) doesn't work after the array is passed to function because of array to pointer decay
         23.09 - std::function can be used more easily for function pointers, although I haven't tried it yet.
-    24: November 7th, 2022 - 144hr += 
+    24: November 7th, 2022 - 144hr += 8hr - Still working on gesture recognition. calcBackProject() seems to behave differently than I initially expected. Going to learn more tomorrow
+        24.01 - calcBackProject works really well at pulling out the most confident regions
+                of color. Less confident regions often have more holes or black spots
+                in them, and so the opening() operation is really effective at weeding these out.
+                Because unconfident regions will expand the black spots, erasing the less confident areas.
+                If it doesn't get rid of them completely, it at least disconnects them. Next, threshold
+                bring the values to 0 or 255 depending on your desired confidence level. Finally, 
+                the floodfillLargestArea() custom function comes in and grabs the best chunk of image for 
+                use as an outline.
+        24.02 - pyrMeanShift didn't seem to work to well in segmenting out the image for use in back backProjection
+                Possibly, I need to use the pyr down parameter more to help clump things together more thoroughly.
+                The program does suggest using it in some way with backprojection.
+        24.03 - Gaussian blur prior to doing a sobel operator tends to thicken transition lines, making 
+                Sobel operations less clean. It's quite annoying.
+        24.04 - When taking sobels of backprojections, they must be filled in objects. If they are just contours, 
+                or just thin lines,  they will take the angle of the inside edge and outside edge,
+                which is obviously going to sum to 0 since they are opposite sides of a line.
+                Therefore, when taking angles of outline of an object, make sure object is filled in. Somehow
+        24.05 - Sometimes it's really useful to only look at a single channel with backprojection, but
+                often more channels are better. My arm is picked out perfectly with some images where 
+                the background colors don't match at all.  But some images have similar colors, and so 
+                lighting differences must be used to distinguish foreground and background objects.
+        24.06 - floodfillLargestArea() has secondary use of selecting the longest continuous contour in image
+        24.07 - cv::Mat is pretty adaptable, however, having a calcBackProject use a single cv::Mat() 
+                for input and output at the same time isn't okay because they are different types?  
+                    - Need to try with other functions to confirm. 
+        24.08 - Working with lots of images becomes hard quickly. Uniform naming system and arrays are desireable. 
+        24.09 - The for (auto img: images) {} modern c++ feature actually pulls an instance of the image
+                but I don't know if it's a copy of the image or the actual image through reference.
 
         

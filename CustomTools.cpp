@@ -80,4 +80,3 @@ void floodFillLargestRegion(cv::Mat src, cv::Mat dst)
 
     return;
 }
-
