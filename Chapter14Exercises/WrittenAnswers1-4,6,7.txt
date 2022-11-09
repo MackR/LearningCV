@@ -1,0 +1,38 @@
+1. We can find the extremal points (i.e., the two points that are farthest apart) in a
+closed contour of N points by comparing the distance of each point to every
+other point.
+a. What is the complexity of such an algorithm?
+    - Answer is (N-1)+ N-2 + N-3 ... - which is n log(n), because it's not linear, nor quadratic
+b. Explain how you can do this faster.
+    - If the shape is completely convex, you can do a binary distance search
+2. What is the maximal closed contour length that could fit into a 4 × 4 image?
+What is its contour area?
+    - If each pixel is described as unit of 1 within the image on each side, the answer is 16 units length
+3. Describe an algorithm for determining whether a closed contour is convex—
+without using cv::isContourConvex().
+    - Take the max endpoints x and y and put connect them in a box, if the area of contour is less than the box, definitely contour. If not, continue to add points and check if the area of your fake one bypasses the actual one.
+4. Describe algorithms:
+a. for determining whether a point is above a line. - If the point satisfies the y = mx + b equation
+b. for determining whether a point is inside a triangle. 
+    - We can take the point and draw a ray emenating out from it, then count the number of times the ray passes through the edges of the polygon. 
+    - OR, we can get the areas of the triangles made by the edges and the point in question. If the area is equal to the triangle area, it is inside the triangle
+c. for determining whether a point is inside a polygon—without using
+cv::pointPolygonTest() .
+    - We can use the same algorithms described for the triangle above in the case the polygon is convex
+
+6. Suppose we are building a bottle detector and wish to create a “bottle” feature.
+We have many images of bottles that are easy to segment and find the contours
+of, but the bottles are rotated and come in various sizes. We can draw the con‐
+tours and then find the Hu moments to yield an invariant bottle-feature vector.
+So far, so good—but should we draw filled-in contours or just line contours?
+Explain your answer.
+    - If the bottles were all side by side in one image, it would be really hard to extract them
+      individually for the cv::moments() function to use as a grayscale image, so I would suggest
+      using line contours.  However, since we can segment the bottles easily, we should only use 
+      line contours because the moment() function interprets all non zero points as having mass
+      and they get taken into account during each calculation. It is better to do less calculating
+      and so we only want to calculate the points since otherwise it doesn't make a difference on the
+      shape interpretation. 
+7. When using cv::moments() to extract bottle contour moments in Exercise 6,
+how should we set isBinary ? Explain your answer.
+    - We should set isBinary to false, because we are using line segments and not full interiors of bottles

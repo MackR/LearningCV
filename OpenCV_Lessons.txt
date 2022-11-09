@@ -271,5 +271,57 @@ Programming Practice Lessons Learned:
         24.08 - Working with lots of images becomes hard quickly. Uniform naming system and arrays are desireable. 
         24.09 - The for (auto img: images) {} modern c++ feature actually pulls an instance of the image
                 but I don't know if it's a copy of the image or the actual image through reference.
+    25: November 8th, 2022 - 152hr += 8  - Programming went really good today! I learned about drawing contours and many more concepts of C++ listed below
+        25.01 - Using Hu moments are crucial for detecting shapes and matching them up in a scale and 
+                translation invariant way. Once you have the contour of an object, the moments 
+                describe a lot about it in a simple way with 5-7 numbers. cv::moments() is the OpenCV
+                function to perform the calculations, and is assisted by other functions.
+        25.02 - Moments can be calculated as full filled in shapes or contours. They can even be weighted
+                based on coloring/brightness, although OpenCV hasn't reavealed full functionality for
+                that yet. Imagine an object is brighter on one end, you could use that in hu moments 
+                to identify the object numerically. It might be computationally intensive thoroughly
+        25.03 - If you want to determine if a point is within a polygon of any shape, you can trace a 
+                ray coming out of it and if the ray goes through an odd number of polygon sides, it is
+                inside the polygon. If it passes through an even number of polygon sides, it is outside it.
+        25.04 - You can draw contours of a binary image with cv::findContours() and then drawContours()
+        25.05 - Bounding rect will calculate a bounding rectangle around a contour. 
+        25.06 - After learning about the median function, and bounding rectangles, it is incredibly easy to 
+                make a car tracking bouding box drawing program assuming the camera is static and we are
+                looking at a road with moving cars. I'm almost shocked that companies offer this program 
+                as a service. It's so simple. The only complex part is assigning an ID to the car and 
+                maintaining the ID throughout the video. But if we take a centroid and compare to centroids
+                in the next video frame, the cars shouldn't have moved too much and should be able to 
+                assign the centroid to the closest centroid of the next frame. Wow.
+        25.07 - cv::connectedComponentsWithStats() outputs a label map where every pixel in the image
+                is a number depending on what contour they belong too. The input image should be binary
+        25.08 - C++, reviewed virtual keyword and learned that virtual should be applied to base class
+                methods.  It basically says that eventhough the base class has its owm method, it should
+                make sure that its children aren't trying to call their own method with a base class
+                pointer.  Virtual tells the compiler to make sure it is using the right method. Simple enough
+        25.09 - Pure virtual functions:  These take the form of Base(type1 param1, type2 param2) = 0.
+                This forces all classes that inherit from base to have their own constructor of the same
+                format.  Having a single pure virtual function makes a base class an abstract class. 
+                Probably because no object is allowed to purely be that class anymore. 
+        25.10 - When using the for(auto obj: array){}, C++ takes a COPY of the object from the array.
+                If we want to work with the actual object itself. We have to do:
+                for (auto& obj: array){}  . This passes by reference. 
+        25.11 - Whenever we call a base class, its constructor for the base class is called, and then 
+                the derived class constructor is called. This can be modified a little though. I'm
+                guessing with pure virtual constructors. 
+        25.12 - The #pragma directive has many uses. It is a signal to the compiler to perform certain tasks
+                when compiling. The most useful for me is #pragma once. Which says to only compile a 
+                file once, no matter how many times it is included by the programmer. 
+                Other pragmas include #pragma startup, exit, warn, and GCC poison function()
+        25.13 - Multithreading: std::thread makes it easy to make a program with multiple threads.
+                If you have two functions, you can run them both simultaneously by doing:
+                std::thread worker1(function, param1, ...); std::thread worker2(function2, param1, ...);
+                Still need to learn a lot more about threading.
+        25.14 - Reinterpret_cast<datatype> is a tricky feature that allows you to reinterpret a pointer
+                to let it know that it is looking at a different type than it was before. You should 
+                always reinterpret_cast to the type that the pointer is actually lookign at. 
+        25.15 - LASTLY: I watched a video on background extraction that featured a busy highway/street.
+                It showed how if you took the median pixel value over the course of 30 frames in a video, 
+                that you could extract the background of a street incredibly easily. It was astounding. 
+                OpenCV is starting to feel easier to understand, and image processing in general. Goodnight
 
         
