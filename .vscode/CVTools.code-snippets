@@ -14,15 +14,37 @@
 		"PIXEL_T pixel = 0;",
     	"for (int row = 0; row < scan.rows; ++row){",
 			"\tfor (int col = 0; col < scan.cols; ++col){",
-				"\t\tpixel = scan.at<PIXEL_T>(col,row);",
+				"\t\tpixel = scan.at<PIXEL_T>(row,col);",
 				"\t\t// Perform pixel operation here",
 				"\t\t}",
 				"\t}",
 				"cv::imshow(\"scan\",scan);",
 				"cv::waitKey(0);",
 		],
-		"description": "Log output to console"
-	}
+		"description": "Go through each pixel in an image"
+	},
+
+	"ReadImages": {
+		"prefix": "readImages",
+		"body": [
+			"//std::string paths[5];",
+			"cv::Mat imgs[5];",
+			"std::string baseImageName = \"HuLetter\";",
+			"std::string imgExtension = \".png\";",
+		
+			"for (auto& img: imgs){",
+				"\tint index = (&img-imgs);",
+				"\tstd::cout << \"The index of image is: \" << index << std::endl;",
+				"\tstd::string path = \"../Resources/\" + baseImageName + std::to_string(index+1) + imgExtension;",
+				"\tstd::cout << \"Path is: \" << path << std::endl;",
+				"\timg = cv::imread(path,cv::IMREAD_COLOR);",
+				"\tif(img.empty()){std::cout << \"Error! Image \" << index +1 << \" is empty\" << std::endl; return 0;}",
+				"}",
+		],
+		"description": "Read in the images associated with the paths"
+		
+    }
+	
 
 	
 }

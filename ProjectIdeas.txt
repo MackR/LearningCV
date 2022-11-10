@@ -1,0 +1,4 @@
+Aruco detector and AR image placement in a getStructuringElement
+HandGesture detection and flesh recognition. 
+Car bounding box detector for street view.
+Background detector and custom green screen

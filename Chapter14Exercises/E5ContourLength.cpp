@@ -46,7 +46,7 @@ int main(int argc, char** argv){
     appContour.push_back(std::vector<cv::Point> {cv::Point(30,30)}); // put in a placeholder vector for the approxPolyDP to modify later
     cv::putText(colorImg,std::to_string(length)+ " pixels long", contours[0][0],cv::FONT_HERSHEY_COMPLEX,0.5,cv::Scalar(255,0,0));
     cv::rectangle(colorImg,cv::boundingRect(contours[0]),cv::Scalar(0,255,0));
-    cv::approxPolyDP(contours[1],appContour[0],20,true);
+    cv::approxPolyDP(contours[1],appContour[0],20,true); // The epsilon value is in terms of pixels
     cv::drawContours(colorImg,appContour,0, cv::Scalar(255,0,0),1);
     double appLen = cv::arcLength(appContour[0],true);
     cv::putText(colorImg,std::to_string(appLen)+" app curve length",appContour[0][0],cv::FONT_HERSHEY_COMPLEX,0.3,cv::Scalar(255,0,0));

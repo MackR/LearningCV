@@ -323,5 +323,37 @@ Programming Practice Lessons Learned:
                 It showed how if you took the median pixel value over the course of 30 frames in a video, 
                 that you could extract the background of a street incredibly easily. It was astounding. 
                 OpenCV is starting to feel easier to understand, and image processing in general. Goodnight
-
+    26: November 9th, 2022: 160hr += 10hr - Spent a lot of time working on the gesture recognition function today. Figuring out how to extract background pieces
+        26.01 - After getting the gesture recognizer pulling out my arm outline. It revealed that
+                if the camera is too blurry or is moving, the algorithms used for objects can be
+                fragile to motion. Canny changes its lines often and may lose ability. Need to 
+                work with and research algorithms that are not suceptible to motion. Or get better camera
+        26.02 - Listed out all the methods possible for extracting an object from foreground
+                BackProjection, grabcut, thresholding, HSV thesholding and filtering, canny edge
+                background subtraction (not attempted yet), sobel filter, bilateral filtering
+                and then canny edge. I've learned quite a few ways
+        26.03 - Learned to calculate moments of an object and how they are rotation invariant 
+                and scale invariant. Useful if your object is completely in picture and not 
+                changing shape in any way. Bottles, spheres, or boxes are good, but not more 
+                complex objects. 
+        26.04 - Aruco codes are also really good for being read from a distance. You can perform
+                transformations on them based on known dimensions and read their inputs. You can
+                even put AR projections on top of the images to make it look like there is art
+                or some other object there.
+        26.05 - Adaptive thresholding is a good tool when lighting is changing the way your object 
+                looks over a wide distance.
+        26.06 - Blur filtering is incredibly important for an image to be processed. It cares 
+                more about the chunks of color than the tiny details within the chunks of color.
+                Median filter has promise, bilateral is really good, but slow. Same for pyrMeanShift.
+        26.07 - Need to learn more about HSV thresholding and its uses. 
+        26.08 - Backprojection has a lot more promise than I originally thought. It could identify
+                uniform backgrounds and possibly deal with motion very well. 
+        26.09 - Canny is really good with a ratio of 15:1. It removes most small detail and leaves
+                the main outline of larger objects. 
+        26.10 - Started working with Boost library today and discovered the circular buffer datatype.
+                Looking forward to learning more about hwo to use it since boost is important, and
+                in this case fits my needs perfectly. 
+        26.11 - Just like we need filtering on the images, out results from the images need filtering 
+                too. My gesture recognition oscillated back and forth between different matches,
+                but the mode of the matches seemed to fit correctly.
         
