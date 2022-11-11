@@ -2,10 +2,11 @@
 #include <stdio.h>
 #include <iostream>
 #include <map>
-#include <boost/circular_buffer.hpp>
+//#include <boost/circular_buffer.hpp>
 #include "../CustomTools.cpp"
 
 void extractOutline(cv::InputArray src, cv::OutputArray dst);
+static std::vector<cv::Point> sampleContour(const cv::Mat &image, int n = 300);
 
 int main(int argc, char **argv)
 {
@@ -13,7 +14,6 @@ int main(int argc, char **argv)
     cv::Mat imgs[9];
     std::string baseImageName = "Gesture";
     std::string imgExtension = ".jpg";
-
 
     for (auto &img : imgs)
     {
@@ -27,127 +27,138 @@ int main(int argc, char **argv)
             std::cout << "Error! Image " << index + 1 << " is empty" << std::endl;
             return 0;
         }
-        // DISPLAYIMAGE(img);
-
+        cv::pyrDown(img, img);
+        cv::Mat dst;
+        // extractOutline(img,dst);
+        DISPLAYIMAGE(img);
+        // DISPLAYIMAGE(dst);
     }
     cv::Moments gestureMoms[9];
     cv::Mat imgResults[9];
 
-    for (int i = 0; i < 9; ++i){
+    typedef std::vector<std::vector<cv::Point>> CONTOUR_SET_T;
+    std::vector<std::vector<cv::Point>> singleContour;
+    std::vector<CONTOUR_SET_T> imgContours(9);
 
+    for (int i = 0; i < 9; ++i)
+    {
+        cv::Mat outline;
+        extractOutline(imgs[i],outline);
+        // cv::findContours(canny, imgContours[i], cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
+        std::vector<cv::Point> c1 = sampleContour(outline);
+        imgContours[i].push_back(c1);
+        // imgResults[i] = canny;
+    }
 
-        // DISPLAYIMAGE(imgs[i]);
-        cv::Mat blur, canny, dilated;
-        cv::bilateralFilter(imgs[i], blur, -1, 15, 5); // Reccommends 5 for real time applications
-        // DISPLAYIMAGE(blur);
-        cv::Canny(blur, canny, 150, 10);
-        // DISPLAYIMAGE(canny);
-        cv::dilate(canny, dilated, cv::Mat());
-        // DISPLAYIMAGE(dilated);
+    cv::VideoCapture cap;
+    cap.open(0);
 
-        cv::floodFill(dilated, cv::Point(0, 0), cv::Scalar(128)); // Pick the corner seed to get background
+    cv::Mat frame, processedFrame;
+    CONTOUR_SET_T frameContour;
+    cv::Ptr<cv::ShapeContextDistanceExtractor> mysc = cv::createShapeContextDistanceExtractor();
+    cv::namedWindow("Original", cv::WINDOW_AUTOSIZE);
+    cv::namedWindow("Processed", cv::WINDOW_AUTOSIZE);
 
-        cv::Mat scan = dilated.clone();
-        typedef uchar PIXEL_T;
-        PIXEL_T pixel = 0;
-        for (int row = 0; row < scan.rows; ++row)
+    std::string gNames[] = {"Thumbs up", "Shake", "The finger", "Gun", "TU", "Shaka", "Perfect", "Italian", "Fistbump"};
+    float distMeasures[9];
+    // boost::circular_buffer<int> cb(30);
+    while (1)
+    {
+
+        cap >> frame;
+        cv::pyrDown(frame, frame);
+        if (frame.empty())
         {
-            for (int col = 0; col < scan.cols; ++col)
+            std::cout << "Frame was empty. Returning." << std::endl;
+            return 0;
+        }
+
+        extractOutline(frame, processedFrame);
+        std::vector<cv::Point> c2 = sampleContour(processedFrame);
+        // cv::findContours(processedFrame, frameContour, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
+
+        float distPrime = 1000, dist = 0;
+        int primeIndex = 0;
+        for (int i = 0; i < 9; ++i)
+        {
+            if (c2.size() != 0)
             {
-                pixel = scan.at<PIXEL_T>(row, col);
-                // Perform pixel operation here
-                if (pixel == 0)
+                dist = mysc->computeDistance(c2,imgContours[i][0]);
+                std::cout << gNames[i] << ": " << distMeasures[i] << ", ";
+
+                distMeasures[i] = dist;
+                if (dist < distPrime)
                 {
-                    // std::cout << "The pixel location is: " << col << ", " << row << std::endl;
-                    // DISPLAYIMAGE(scan);
-                    cv::floodFill(scan, cv::Point(col, row), cv::Scalar(255));
+                    distPrime = dist;
+                    primeIndex = i;
                 }
             }
         }
-        canny = scan.clone();
-        cv::floodFill(canny, cv::Point(0, 0), cv::Scalar(0));
+        std::cout << std::endl;
 
-        //DISPLAYIMAGE(canny);
+        // cb.pushback(primeIndex);
 
-        imgResults[i] = canny;  
-
-    }
-
-        cv::VideoCapture cap;
-        cap.open(0);
-
-        cv::Mat frame, processedFrame;
-        cv::namedWindow("Original",cv::WINDOW_AUTOSIZE);
-        cv::namedWindow("Processed",cv::WINDOW_AUTOSIZE);
-        
-        std::string gNames[] = {"Thumbs up", "Shake", "The finger", "Gun", "TU", "Shaka", "Perfect", "Italian", "Fistbump"};
-        boost::circular_buffer<int> cb(30);
-        while(framePose++){
-            
-            cap >> frame;
-            cv::pyrDown(frame,frame);
-            if (frame.empty()){
-                std::cout << "Frame was empty. Returning." << std::endl; return 0;
-            }
-
-            extractOutline(frame,processedFrame);
-            double matchPrime = 1000, match = 0;
-            int primeIndex;
-            for (int i = 0; i < 9; ++i){
-                match = cv::matchShapes(processedFrame,imgResults[i],cv::CONTOURS_MATCH_I1,0);
-                if(match < matchPrime){matchPrime = match; primeIndex = i; }
-
-            }
-
-            cb.pushback(primeIndex);
+        cv::putText(frame, gNames[primeIndex], cv::Point(frame.cols / 2, frame.rows - 100), cv::FONT_HERSHEY_COMPLEX, .75, cv::Scalar(255, 0, 0));
+        // cv::drawContours(processedFrame,frameContour,-1,cv::Scalar(100));
+        cv::Mat inverseMask;
+        cv::bitwise_not(processedFrame, inverseMask);
 
 
-            cv::putText(frame,gNames[primeIndex],cv::Point(frame.cols/2,frame.rows-200),cv::FONT_HERSHEY_COMPLEX,.75,cv::Scalar(255,0,0));
+        std::cout << std::endl;
 
-            cv::imshow("Original", frame);
-            cv::imshow("Processed", processedFrame);
-            if(cv::waitKey(20) == 27){break;}
-
-
-
-        }
-
-        
-
-        // double closeness = cv::matchShapes(fImgBWScale,fImgBWScale,cv::CONTOURS_MATCH_I1,1);
-        // double closenessAlt = cv::matchShapes(fImgBWRot,img2,cv::CONTOURS_MATCH_I1,1);
-
-        // std::cout << "Closeness match is: " << closeness << std::endl;
-        // std::cout << "Closeness non-match is: " << closenessAlt << std::endl;
-
-        return 0;
-    }
-
-    void extractOutline(cv::InputArray src, cv::OutputArray dst){
-        cv::Mat blur, canny, dilated;
-        cv::bilateralFilter(src, blur, -1, 15, 5); // Reccommends 5 for real time applications
-        cv::Canny(blur, canny, 150, 10);
-        cv::dilate(canny, canny, cv::Mat());
-
-        cv::floodFill(canny, cv::Point(0, 0), cv::Scalar(128)); // Pick the corner seed to get background
-        typedef uchar PIXEL_T;
-        PIXEL_T pixel = 0;
-        for (int row = 0; row < canny.rows; ++row)
+        cv::imshow("Original", frame);
+        cv::Mat appliedMask = frame.setTo(cv::Scalar(0, 0, 0), inverseMask);
+        cv::imshow("Processed", appliedMask);
+        if (cv::waitKey(20) == 27)
         {
-            for (int col = 0; col < canny.cols; ++col)
-            {
-                pixel = canny.at<PIXEL_T>(row, col);
-                // Perform pixel operation here
-                if (pixel == 0)
-                {
-                    // std::cout << "The pixel location is: " << col << ", " << row << std::endl;
-                    // DISPLAYIMAGE(scan);
-                    cv::floodFill(canny, cv::Point(col, row), cv::Scalar(255));
-                }
-            }
+            break;
         }
-        cv::compare(canny,128,dst,cv::CMP_GT);
-
-        //DISPLAYIMAGE(dst);
-
     }
+
+    // double closeness = cv::matchShapes(fImgBWScale,fImgBWScale,cv::CONTOURS_MATCH_I1,1);
+    // double closenessAlt = cv::matchShapes(fImgBWRot,img2,cv::CONTOURS_MATCH_I1,1);
+
+    // std::cout << "Closeness match is: " << closeness << std::endl;
+    // std::cout << "Closeness non-match is: " << closenessAlt << std::endl;
+
+    return 0;
+}
+
+void extractOutline(cv::InputArray src, cv::OutputArray dst)
+{
+    cv::Mat blur, canny, dilated;
+    cv::bilateralFilter(src, blur, -1, 20, 5); // Reccommends 5 for real time applications
+    cv::Canny(blur, canny, 150, 10);
+    cv::dilate(canny, canny, cv::Mat());
+    cv::dilate(canny, canny, cv::Mat());
+
+    cv::floodFill(canny, cv::Point(0, 0), cv::Scalar(128)); // Pick the corner seed to get background
+    cv::compare(canny, cv::Scalar(128), dst, cv::CMP_NE);
+
+    // DISPLAYIMAGE(dst);
+}
+
+static std::vector<cv::Point> sampleContour(const cv::Mat &image, int n)
+{
+    std::vector<std::vector<cv::Point>> _contours;
+    std::vector<cv::Point> all_points;
+    findContours(image, _contours, cv::RETR_LIST, cv::CHAIN_APPROX_NONE);
+    if(_contours.size() == 0) {std::cout << "Screen Empty" << std::endl; return std::vector<cv::Point>();}
+    for (size_t i = 0; i < _contours.size(); i++)
+    {
+        for (size_t j = 0; j < _contours[i].size(); j++)
+            all_points.push_back(_contours[i][j]);
+    }
+    //
+        int dummy = 0;
+        for (int add = (int)all_points.size(); add < n; add++)
+            all_points.push_back(all_points[dummy++]);
+
+        // Sample uniformly
+        random_shuffle(all_points.begin(), all_points.end());
+        std::vector<cv::Point> sampled;
+        for (int i = 0; i < n; i++){
+            sampled.push_back(all_points[i]);
+        }
+        return sampled;
+}

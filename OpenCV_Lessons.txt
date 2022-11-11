@@ -356,4 +356,40 @@ Programming Practice Lessons Learned:
         26.11 - Just like we need filtering on the images, out results from the images need filtering 
                 too. My gesture recognition oscillated back and forth between different matches,
                 but the mode of the matches seemed to fit correctly.
+    27: November 10, 2022: 170hr += 5hr - Finished my gesture recognition program today. Started learning about background subtraction.
+        27.01 - Gesture recognizer confidently extracts outlines. 
+                However it doesn't guess gestures correctly because the amount of my arm
+                sticking in the screen always varries, throwing off the hu moments matching.
+                Book suggests cropping my arm and only focussing on hand, which should fix issue.
+                Lesson is to only use Hu moments on fixed object outlines with fixed moments.
+        27.02 - Learned about the shapecontextExtractor functor. It's complex and uses point to 
+                point matching on a contour using histograms. It's supposed to be accurate, but 
+                it is quite slow.  It might be more accurate. I adjusted my program and used it
+                for computation but I need objects with fixed moments instead of using my arm on
+                a screen. It barely passed real time computation limits using 300 points. I should
+                possibly decrease the point usage size to speed up computation. Points should be
+                randomly sampled over an entire contour and only take 300 from each contour. 
+        27.03 - The canny edge detector might benefit from an algorithm that connects gaps in the
+                edges that it finds, using proximity as a measure. Perhaps Proximity of endpoints to 
+                other endpoints. If they are within a certain distance then connect them, using 
+                blackhat operator, then do the fill and the object outlines should be full for the 
+                close matches. Far apart gaps are a different story. 
+        27.04 - Dilate performs well for filling in the really close gaps of a canny contour.
+        27.05 - One paper I read said that they used hu moments for matching gestures in sign
+                language. The difference was they had a cutout of the hand shape to do it. One 
+                novelty I learned is that some signs mean different things when rotated. Problem is
+                that hu moments are rotation invariant. They said if you use height/width ratio 
+                filtering then you should be able to fix that problem. Very interesting. Maybe minimum
+                size bounding box is a better solution, and then retrieving the angle of the box.
+        27.06 - Researchers also used skin color recognition calibration for hand detection. Quite simple.
+        27.07 - The line iterator cv::LineIterator allows iterating over a line within an image and 
+                retrieving the consecutive pixel values. It returns a pointer to each pixel but 
+                WARNING, it is a pointer to uchar, so it needs to be recast to the type I want. 
+        27.08 - Scene averaging is very important for background subtraction, as well as modeling 
+                pixel differences over time and getting variances. The averages for each pixel 
+                should be held within another image of the same size where each pixel is your averages
+                value. Most math for pixels over an entire image should be done in cv::Mat.
+        27.09 - The accumulator function in opencv allows accumulation within pixels of an image. Useful.
+        27.10 - The img.convertTo(dst, CV_TYPE) function is good for copying img to dst and converting 
+                the datatype it uses. 
         
