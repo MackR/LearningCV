@@ -392,4 +392,7 @@ Programming Practice Lessons Learned:
         27.09 - The accumulator function in opencv allows accumulation within pixels of an image. Useful.
         27.10 - The img.convertTo(dst, CV_TYPE) function is good for copying img to dst and converting 
                 the datatype it uses. 
-        
+    28: November 29th 2022: 175hr += 5
+        - I started work on an industry image recognition problem today, given by a previous coworker who
+          is also working in the industry and is dealing with it at the moment.
+        - Learning how to identify box lines and pull them out from cluttered background

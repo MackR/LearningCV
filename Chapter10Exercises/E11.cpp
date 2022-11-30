@@ -32,7 +32,7 @@ int main(int argc, char** argv){
     // Do image processing here
 
     cv::Mat proc(fImg.rows,fImg.cols, CV_8U);
-    cv::morphologyEx(fImg,proc,cv::MORPH_TOPHAT,cv::Mat());
+    cv::morphologyEx(fImg,proc,cv::MORPH_BLACKHAT,cv::Mat());
     cv::imshow("proc",proc);
     cv::waitKey(0);
 

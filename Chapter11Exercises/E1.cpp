@@ -4,7 +4,7 @@
 
 
 int main(int argc, char** argv){
-    std::string path = "../Resources/Moi.jpg";
+    std::string path = "../Resources/BlueChairOutside.jpg";
     //std::string path2 = "../Resources/img2.jpg";
     cv::Mat img;
     //cv::Mat img2;
@@ -56,8 +56,8 @@ int main(int argc, char** argv){
     cv::dilate(proc,proc,cv::Mat());
     cv::Laplacian(fImgBW,proc2,CV_8U,5);
 
-    cv::bitwise_or(proc,proc2,proc2);
-    // cv::erode(proc2,proc2,cv::Mat());
+    // cv::bitwise_or(proc,proc2,proc2);
+    cv::erode(proc2,proc2,cv::Mat());
     
     // cv::dilate(proc,proc,cv::Mat());
     // cv::morphologyEx(proc,proc,cv::MORPH_OPEN,k3);
